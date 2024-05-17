@@ -27,6 +27,7 @@ export default function Projects() {
                 <section>
                     <header>
                         <h2>Projects</h2>
+                        <button>Create project</button>
                     </header>
                     {projects.map(({ id, title, description, by }) => (
                         <aside>
