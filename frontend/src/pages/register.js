@@ -14,6 +14,8 @@ export default function Register() {
                         </header>
                         <label for="email">Email</label>
                         <input name="email" id="email" type="email" />
+                        <label for="username">Username</label>
+                        <input name="username" id="username" />
                         <label for="password">Password</label>
                         <input name="password" id="password" type="password" />
                         <button type="submit">Login</button>

@@ -18,7 +18,7 @@ export default function Project() {
                     <header>
                         <h2>{project.title}</h2>
                         <p>{project.description}</p>
-                        <p>By: {project.by}</p>
+                        <p>Members: X, Y, Z</p>
                     </header>
                     <button>Join project</button>
                 </section>
