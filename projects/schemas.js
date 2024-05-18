@@ -16,7 +16,7 @@ const ProjectSchema = new mongoose.Schema({
     techStack: [String],
     neededFields: [String],
 
-});
+}, { collection:"projects" });
 
 const Project = mongoose.model("Project", ProjectSchema)
 module.exports.Project = Project
