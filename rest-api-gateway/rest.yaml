@@ -1,0 +1,89 @@
+swagger: "2.0"
+info:
+  title: REST gw
+  description: project assembler rest gateway
+  version: 1.0.0
+
+host: coe454-project-api.apigateway.ordinal-crowbar-414913.cloud.goog 
+basePath: /
+schemes:
+  - https
+  - http
+
+paths:
+  /projects:
+    get:
+      operationId: getProjects
+      summary: returns all projects
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+      x-google-backend:
+        address: https://projects-xo5ixgaica-uc.a.run.app/projects
+    post:
+      operationId: createProject
+      summary: create a new project
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+      x-google-backend:
+        address: https://projects-xo5ixgaica-uc.a.run.app/projects
+
+  /projects/{id}/join:
+    put:
+      operationId: joinProject
+      summary: join a project
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: id of project to join 
+          required: true
+          type: string
+      responses:
+        201:
+          description: OK
+      x-google-backend:
+        address: https://projects-xo5ixgaica-uc.a.run.app
+        path_translation: APPEND_PATH_TO_ADDRESS
+
+  /getUser:
+    get:
+      operationId: getUser
+      summary: get a user by name, email, or fields of expertise
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+      x-google-backend:
+        address: https://us-central1-ordinal-crowbar-414913.cloudfunctions.net/users/getUser
+  
+  /createUser:
+    post:
+      operationId: createUser
+      summary: create a new user
+      produces:
+        - application/json
+      responses:
+        201:
+          description: OK
+      x-google-backend:
+        address: https://us-central1-ordinal-crowbar-414913.cloudfunctions.net/users/createUser
+  
+  /editUser:
+    post:
+      operationId: updateUser
+      summary: update user info
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+      x-google-backend:
+        address: https://us-central1-ordinal-crowbar-414913.cloudfunctions.net/users/editUser
