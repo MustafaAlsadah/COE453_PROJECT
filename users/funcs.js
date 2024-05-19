@@ -1,7 +1,10 @@
 const express = require('express');
+const cors = require('cors')
 const mongoose = require('mongoose');
 const app = express();
+
 app.use(express.json());
+app.use(cors())
 
 const uri = process.env.MONGODB_URI
 
@@ -19,9 +22,13 @@ const User = new mongoose.Schema({
 
 const UserModel = mongoose.model('User', User);
 
+app.options('/', cors())
 app.get("/", async (req, res) => {
     res.json({"msg": "PONG"})
 })
+
+
+app.options('/getUser', cors())
 app.get("/getUser", async (req, res) => {
 
     const { name, email, fieldsOfExpertise } = req.query;
@@ -52,6 +59,7 @@ app.get("/getUser", async (req, res) => {
     }
 });
 
+app.options('/createUser', cors())
 app.post("/createUser", async (req, res) => {
     const { name, email, phone, projects, fieldsOfExpertise } = req.body;
     console.log(req.body);
@@ -75,6 +83,7 @@ app.post("/createUser", async (req, res) => {
     }
 });
 
+app.options('/editUser', cors())
 app.put("/editUser", async (req, res) => {
     const { name, email, phone, projects, fieldsOfExpertise } = req.body;
     console.log(req.body);
