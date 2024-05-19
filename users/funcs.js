@@ -18,25 +18,29 @@ const User = new mongoose.Schema({
     phone: String,
     projects: Array,
     fieldsOfExpertise: Array
-}, { collection:"users" });
+}, { collection: "users" });
 
 const UserModel = mongoose.model('User', User);
 
 app.options('/', cors())
 app.get("/", async (req, res) => {
-    res.json({"msg": "PONG"})
+    res.json({ "msg": "PONG" })
 })
 
 
 app.options('/getUser', cors())
 app.get("/getUser", async (req, res) => {
 
-    const { name, email, fieldsOfExpertise } = req.query;
+    const { name, email, fieldsOfExpertise, id } = req.query;
 
     try {
         //fetch user using either name or email or fieldsOfExpertise
         //create query 
         let query = {};
+        let byIdQuery;
+        if (id) {
+            byIdQuery = { _id: id };
+        }
         if (name) {
             query.name = name;
         }
@@ -47,7 +51,7 @@ app.get("/getUser", async (req, res) => {
             query.fieldsOfExpertise = { $in: fieldsOfExpertise };
         }
 
-        const user = await UserModel.find(query)
+        const user = await UserModel.find(byIdQuery ? byIdQuery : query)
         if (user) {
             res.status(200).send(user);
         } else {
@@ -116,4 +120,4 @@ app.listen(3000, async () => {
 });
 
 
-module.exports = {app}
+module.exports = { app }
