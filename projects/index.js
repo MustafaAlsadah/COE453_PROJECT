@@ -1,19 +1,26 @@
 const express = require('express')
+const cors = require('cors')
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 const { Project } = require('./schemas.js');
 
 const app = express()
 const port = 3000
+app.use(cors())
 app.use(bodyParser.json());
 
 // mongodb uri
 const uri = process.env.MONGODB_URI;
 
 
+app.options('/', cors())
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+
+app.options('/projects', cors())
 
 app.get('/projects', async (req, res) => {
   const projects = await Project.find({})
@@ -32,6 +39,7 @@ app.get('/projects', async (req, res) => {
 app.post('/projects', (req, res) => {
   const project = new Project(req.body)
   project.save()
+
   res.status(201).json({
     _id: project.id,
     name: project.name,
@@ -41,6 +49,8 @@ app.post('/projects', (req, res) => {
     neededFields: project.neededFields
   })
 })
+
+app.options('/projects/:id/join', cors())
 
 app.put('/projects/:id/join', async (req, res) => {
   try {
