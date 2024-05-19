@@ -1,12 +1,27 @@
-
-const { UserModel, ProjectModel } = require('../db.js');
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 app.use(express.json());
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
-});
 
+const uri = process.env.MONGODB_URI
+
+const User = new mongoose.Schema({
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    name: String,
+    phone: String,
+    projects: Array,
+    fieldsOfExpertise: Array
+}, { collection:"users" });
+
+const UserModel = mongoose.model('User', User);
+
+app.get("/", async (req, res) => {
+    res.json({"msg": "PONG"})
+})
 app.get("/getUser", async (req, res) => {
 
     const { name, email, fieldsOfExpertise } = req.query;
@@ -85,3 +100,11 @@ app.put("/editUser", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+app.listen(3000, async () => {
+    await mongoose.connect(uri);
+    console.log("Server is running on port 3000");
+});
+
+
+module.exports = {app}
