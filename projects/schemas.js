@@ -9,7 +9,7 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         required: true
     },    
-    members: {
+    membersIds: {
         type: [String],
         required: true
     },
