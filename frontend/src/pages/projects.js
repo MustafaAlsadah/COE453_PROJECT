@@ -2,11 +2,12 @@ import { Link } from "react-router-dom"
 import Navbar from "../components/navbar"
 import { useEffect } from "react"
 import { useState } from "react"
+import { API_URL } from "../constants"
 
 export default function Projects() {
     const [projects, setProjects] = useState([])
     useEffect(() => {
-        fetch("https://projects-xo5ixgaica-uc.a.run.app/projects")
+        fetch(`${API_URL}/projects`)
             .then(response => response.json())
             .then(data => setProjects(data.projects)).catch(err => console.log(err))
     }, [])

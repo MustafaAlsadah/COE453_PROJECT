@@ -1,5 +1,6 @@
 import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../constants";
 
 export default function CreateProject() {
     const navigate = useNavigate();
@@ -9,8 +10,7 @@ export default function CreateProject() {
         const formdata = new FormData(e.currentTarget)
         const payload = Object.fromEntries(formdata)
         payload.techStack = payload.techStack.split(" ")
-        fetch("https://projects-xo5ixgaica-uc.a.run.app/projects", {
-        // fetch("http://localhost:8000/projects", {
+        fetch(API_URL, {
             method: "post",
             headers: {
                 'Content-Type': 'application/json'

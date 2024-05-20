@@ -1,6 +1,7 @@
 import Navbar from "../components/navbar"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
+import { API_URL } from "../constants"
 
 export default function Project() {
     const [project, setProject] = useState(null)
@@ -8,29 +9,21 @@ export default function Project() {
 
     // get project id from url
     const { id } = useParams()
-    console.log("ID", id)
 
     useEffect(() => {
         setMembers([])
-        fetch("https://rest-gateway-swwzqq7.uc.gateway.dev/projects")
+        fetch(`${API_URL}/projects`)
             .then(response => response.json())
             .then(data => data.projects)
             .then(projects => projects.filter(prj => prj._id === id)[0])
             .then(project => {
                 setProject(project)
                 project.membersIds.forEach((id) => {
-                    fetch(`http://localhost:3001/getUser?id=${id}`)
+                    fetch(`${API_URL}/getUser?id=${id}`)
                         .then(res => res.json())
                         .then(data => setMembers(members.concat(data)))
                 })
             })
-            // .then(project => {
-            //     project.members = project.membersIds.map((id) => {
-            //         fetch(`https://rest-gateway-swwzqq7.uc.gateway.dev/getUser?id=${id}`)
-            //             .then(response => response.json())
-            //             .then(data => data.user)
-            //     })
-            // })
             .catch(err => console.log(err))
     }, [])
 
@@ -38,11 +31,11 @@ export default function Project() {
         e.preventDefault()
         const formdata = new FormData(e.currentTarget)
         const payload = Object.fromEntries(formdata)
-        fetch(`http://localhost:3001/getUser?email=${payload.email}`)
+        fetch(`${API_URL}/getUser?email=${payload.email}`)
             .then((res) => res.json())
             .then((data) => {
                 if (data.length == 0)
-                    return fetch(`http://localhost:3001/createUser`, {
+                    return fetch(`${API_URL}/createUser`, {
                         method: "post",
                         headers: {
                             'Content-Type': 'application/json'
@@ -53,7 +46,7 @@ export default function Project() {
             })
             .then((data) => {
                 const joinPayload = { member: data._id, id: project._id }
-                fetch(`https://rest-gateway-swwzqq7.uc.gateway.dev/projects/${project.id}/join`, {
+                fetch(`${API_URL}/projects/${project.id}/join`, {
                     method: "post",
                     headers: {
                         'Content-Type': 'application/json'
