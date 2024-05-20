@@ -1,75 +1,11 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
 const axios = require('axios')
+const { schema } = require('./schemas.js')
 
-const PROJECTS_API_URL = process.env.PROJECTS_API_URL ?? "http://localhost:3000"
-const USERS_API_URL = process.env.PROJECTS_API_URL ?? "http://localhost:5000"
-
-/* Query example
-query {
-  projects {
-    name
-    members
-  }
-}
-*/
-
-// Construct a schema, using GraphQL schema language
-const schema = buildSchema(`
-  type Query {
-    hello: String
-    projects: [Project]
-    getUser: User
-  }
-
-  type Mutation {
-    createProject(project: CreateProjectInput): Project
-    joinProject(input: joinProjectInput): Project
-    createUser(input: CreateUserInput): User
-    updateUser(input: UpdateUserInput): User
-  }
-
-  type Project {
-    _id: ID
-    name: String
-    desc: String
-    membersIds: [String]
-    techStack: [String]
-    neededFields: [String]
-  }
-
-  type User {
-    email: String!
-    name: String 
-    phone: String
-    fieldsOfExpertise: [String]
-  }
-
-  input CreateProjectInput {
-    name: String
-    desc: String
-    membersIds: [String]
-  }
-
-  input joinProjectInput {
-    id: ID
-    member: String
-  }
-
- input GetUserInput {
-    name: String 
-    email: String
-    fieldsOfExpertise: [String]
-  } 
-
-  input CreateUserInput {
-    email: String!
-    name: String 
-    phone: String
-    fieldsOfExpertise: [String]
-  }
-`);
+const PROJECTS_API_URL = process.env.PROJECTS_API_URL ?? "http://localhost:3002"
+const USERS_API_URL = process.env.PROJECTS_API_URL ?? "http://localhost:3001"
+const port = 4000
 
 async function getProjects() {
   const res = await axios.get(`${PROJECTS_API_URL}/projects`)
@@ -90,13 +26,25 @@ async function joinProject({ input }) {
   return res.data
 }
 
-async function getUser(input) {
-  console.log({input});
-  const res = await axios.get(`${USERS_API_URL}/getUser`)
-  return res.data
+async function getUser({ input }) {
+  const params = new URLSearchParams(input)
+  const res = await axios.get(`${USERS_API_URL}/getUser?${params.toString()}`)
+  if (res.data)
+    return res.data[0]
+  return null
 }
-async function createUser(data) {}
-async function updateUser(data) {}
+async function createUser({ input }) {
+  const res = await axios.post(`${USERS_API_URL}/createUser`, input)
+  if (res.data)
+    return res.data
+  return null
+}
+async function updateUser({ input }) {
+  const res = await axios.put(`${USERS_API_URL}/createUser`, input)
+  if (res.data)
+    return res.data
+  return null
+}
 
 const root = {
   hello: () => {
@@ -123,7 +71,7 @@ app.use(
   })
 );
 
-app.listen(4000, () =>
-  console.log('Running a GraphQL API server at http://localhost:4000/')
+app.listen(port, () =>
+  console.log(`Running a GraphQL API server at http://localhost:${port}/`)
 );
 

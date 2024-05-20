@@ -3,25 +3,10 @@ import Navbar from "../components/navbar"
 import { useEffect } from "react"
 import { useState } from "react"
 
-// const projects = [
-//     {
-//         id: 1,
-//         title: "Taqapay",
-//         description: "Superchare your fuel usage!",
-//         by: "Tawapay Team"
-//     },
-//     {
-//         id: 2,
-//         title: "Warmify",
-//         description: "Smart water heater",
-//         by: "Warmify team"
-//     }
-// ]
-
 export default function Projects() {
     const [projects, setProjects] = useState([])
     useEffect(() => {
-        fetch("https://rest-gateway-swwzqq7.uc.gateway.dev/projects")
+        fetch("https://projects-xo5ixgaica-uc.a.run.app/projects")
             .then(response => response.json())
             .then(data => setProjects(data.projects)).catch(err => console.log(err))
     }, [])
@@ -37,7 +22,8 @@ export default function Projects() {
                 <section>
                     <header>
                         <h2>Projects</h2>
-                        <button>Create project</button>
+                        <Link to={`/create-project`}><button>Create project</button>
+                        </Link>
                     </header>
                     {projects.map(({ _id, name, techStack, desc }) => (
                         <aside>

@@ -7,7 +7,7 @@ export default function Header() {
             <Navbar /> 
             <h1>The #1 Platform For Finding Team-mates</h1>
             <p>Find the perfect teammate for your new sideproject!</p>
-            <Link to="/register">
+            <Link to="/projects">
                 <b>Get started</b>
             </Link>
             <br />

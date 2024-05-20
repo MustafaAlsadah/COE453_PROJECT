@@ -10,6 +10,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Projects from './pages/projects';
 import Project from './pages/project';
+import CreateProject from './pages/create-project';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/projects",
     element: <Projects />,
+  },
+  {
+    path: "/create-project",
+    element: <CreateProject />,
   },
   {
     path: "/projects/:id",

@@ -1,26 +1,16 @@
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose');
-const app = express();
+const bodyParser = require('body-parser')
+const { User } = require('./schemas.js');
 
+const app = express();
 app.use(cors())
 app.use(express.json());
+app.use(bodyParser.json());
 
+const port = 3001
 const uri = process.env.MONGODB_URI
-
-const User = new mongoose.Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    name: String,
-    phone: String,
-    projects: Array,
-    fieldsOfExpertise: Array
-}, { collection: "users" });
-
-const UserModel = mongoose.model('User', User);
 
 app.options('/', cors())
 app.get("/", async (req, res) => {
@@ -51,7 +41,7 @@ app.get("/getUser", async (req, res) => {
             query.fieldsOfExpertise = { $in: fieldsOfExpertise };
         }
 
-        const user = await UserModel.find(byIdQuery ? byIdQuery : query)
+        const user = await User.find(byIdQuery ? byIdQuery : query)
         if (user) {
             res.status(200).send(user);
         } else {
@@ -66,14 +56,13 @@ app.get("/getUser", async (req, res) => {
 app.options('/createUser', cors())
 app.post("/createUser", async (req, res) => {
     const { name, email, phone, projects, fieldsOfExpertise } = req.body;
-    console.log(req.body);
 
     if (!email) {
         return res.status(400).send("Email is required");
     }
 
     try {
-        const user = new UserModel({
+        const user = new User({
             name,
             email,
             phone,
@@ -83,6 +72,7 @@ app.post("/createUser", async (req, res) => {
         await user.save();
         res.status(201).send(user);
     } catch (err) {
+        console.log("ERROR!");
         res.status(500).send(err.message);
     }
 });
@@ -90,14 +80,13 @@ app.post("/createUser", async (req, res) => {
 app.options('/editUser', cors())
 app.put("/editUser", async (req, res) => {
     const { name, email, phone, projects, fieldsOfExpertise } = req.body;
-    console.log(req.body);
 
     if (!email) {
         return res.status(400).send("Email is required");
     }
 
     try {
-        const user = await UserModel.findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).send("User not found");
         }
@@ -114,9 +103,14 @@ app.put("/editUser", async (req, res) => {
     }
 });
 
-app.listen(3000, async () => {
-    await mongoose.connect(uri);
-    console.log("Server is running on port 3000");
+app.listen(port, async () => {
+    try {
+        await mongoose.connect(uri);
+    } catch (err) {
+        console.error(`Failed to connect to mongodb instance at ${uri}. ${err.message}`)
+    }
+    console.log(`Connect to mongodb instance at ${uri}`);
+    console.log(`Server is running on port ${port}`);
 });
 
 
