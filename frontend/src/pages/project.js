@@ -19,7 +19,7 @@ export default function Project() {
             .then(project => {
                 setProject(project)
                 project.membersIds.forEach((id) => {
-                    fetch(`${API_URL}/getUser?id=${id}`)
+                    fetch(`${API_URL}/user?id=${id}`)
                         .then(res => res.json())
                         .then(data => setMembers(members.concat(data)))
                 })
@@ -31,11 +31,11 @@ export default function Project() {
         e.preventDefault()
         const formdata = new FormData(e.currentTarget)
         const payload = Object.fromEntries(formdata)
-        fetch(`${API_URL}/getUser?email=${payload.email}`)
+        fetch(`${API_URL}/user?email=${payload.email}`)
             .then((res) => res.json())
             .then((data) => {
                 if (data.length == 0)
-                    return fetch(`${API_URL}/createUser`, {
+                    return fetch(`${API_URL}/user`, {
                         method: "post",
                         headers: {
                             'Content-Type': 'application/json'

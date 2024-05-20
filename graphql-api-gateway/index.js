@@ -28,19 +28,19 @@ async function joinProject({ input }) {
 
 async function getUser({ input }) {
   const params = new URLSearchParams(input)
-  const res = await axios.get(`${USERS_API_URL}/getUser?${params.toString()}`)
+  const res = await axios.get(`${USERS_API_URL}/user?${params.toString()}`)
   if (res.data)
     return res.data[0]
   return null
 }
 async function createUser({ input }) {
-  const res = await axios.post(`${USERS_API_URL}/createUser`, input)
+  const res = await axios.post(`${USERS_API_URL}/user`, input)
   if (res.data)
     return res.data
   return null
 }
 async function updateUser({ input }) {
-  const res = await axios.put(`${USERS_API_URL}/createUser`, input)
+  const res = await axios.put(`${USERS_API_URL}/user`, input)
   if (res.data)
     return res.data
   return null

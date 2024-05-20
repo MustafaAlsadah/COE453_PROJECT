@@ -18,8 +18,8 @@ app.get("/", async (req, res) => {
 })
 
 
-app.options('/getUser', cors())
-app.get("/getUser", async (req, res) => {
+app.options('/user', cors())
+app.get("/user", async (req, res) => {
 
     const { name, email, fieldsOfExpertise, id } = req.query;
 
@@ -53,8 +53,7 @@ app.get("/getUser", async (req, res) => {
     }
 });
 
-app.options('/createUser', cors())
-app.post("/createUser", async (req, res) => {
+app.post("/user", async (req, res) => {
     const { name, email, phone, projects, fieldsOfExpertise } = req.body;
 
     if (!email) {
@@ -77,8 +76,7 @@ app.post("/createUser", async (req, res) => {
     }
 });
 
-app.options('/editUser', cors())
-app.put("/editUser", async (req, res) => {
+app.put("/user", async (req, res) => {
     const { name, email, phone, projects, fieldsOfExpertise } = req.body;
 
     if (!email) {

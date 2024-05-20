@@ -52,7 +52,7 @@ paths:
         address: <PROJECTS_ADDRESS_HERE>
         path_translation: APPEND_PATH_TO_ADDRESS
 
-  /getUser:
+  /user:
     get:
       operationId: getUser
       summary: get a user by name, email, or fields of expertise
@@ -64,7 +64,7 @@ paths:
       x-google-backend:
         address: <USERS_ADDRESS_HERE>
   
-  /createUser:
+  /user:
     post:
       operationId: createUser
       summary: create a new user
@@ -76,8 +76,8 @@ paths:
       x-google-backend:
         address: <USERS_ADDRESS_HERE>
   
-  /editUser:
-    post:
+  /user:
+    put:
       operationId: updateUser
       summary: update user info
       produces:
